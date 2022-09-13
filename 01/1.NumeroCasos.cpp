@@ -68,12 +68,12 @@ void resuelveCaso() {
     int height = 0;
 
     if (tree.empty()) {
-        cout << "SI" << endl;
+        cout << "SI" << "\n";
     }
     else {
         bool esAVL = isAVL(tree);
 
-        cout << (esAVL ? "SI" : "NO") << endl;
+        cout << (esAVL ? "SI" : "NO") << "\n";
     }
 }
 

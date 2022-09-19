@@ -91,6 +91,8 @@ public:
     }
 
     T kesimoMenor(int orden) const{
+        if (orden > nelems)
+            throw std::out_of_range("");
         return kesimoMenor(orden, raiz);
     }
 
@@ -178,8 +180,7 @@ protected:
         r2->iz = r1->dr;
         r1->dr = r2;
 
-        if (r2->iz != nullptr) r2->tam_i -= r1->tam_i;
-        else r2->tam_i = 1;
+        r2->tam_i -= r1->tam_i;
 
         r2->altura = std::max(altura(r2->iz), altura(r2->dr)) + 1;
         r1->altura = std::max(altura(r1->iz), altura(r1->dr)) + 1;

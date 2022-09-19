@@ -7,10 +7,10 @@
 
 #include <iostream>
 #include <fstream>
-#include <vector>
-#include <stdexcept>
-#include "TreeSet_AVL.h"  // propios o los de las estructuras de datos de clase
+#include <queue>
 using namespace std;
+// propios o los de las estructuras de datos de clase
+
 /*@ <answer>
   
  Escribe aquí un comentario general sobre la solución, explicando cómo
@@ -24,44 +24,39 @@ using namespace std;
 // Escribe el código completo de tu solución aquí debajo
 // ================================================================
 //@ <answer>
+long long calculaCoste(std::priority_queue<long long, std::vector<long long>, std::greater<long long>> & nums) {
+    long long coste = 0;
+    while (nums.size() > 1) {
+        long long a = nums.top(); nums.pop();
+        long long b = nums.top(); nums.pop();
+        long costeTemp = a + b;
+        coste += costeTemp;
+        nums.push(costeTemp);
+    }
+    return coste;
+}
 
 
 bool resuelveCaso() {
    
-   // leer los datos de la entrad
-    int n;
+   // leer los datos de la entrada
+    long long n = 0;
     cin >> n;
-    Set<int> set;
 
    if (n == 0)
       return false;
    
-   for (int i = 0; i < n; i++) {
-       int e;
-       cin >> e;
-       set.insert(e);
-   }
-   int m;
-   cin >> m;
-   
-   vector<int> minimums(m , -1);
+   // resolver el caso posiblemente llamando a otras funciones
+   priority_queue<long long, std::vector<long long>, std::greater<long long>> nums;
 
-   for (int i = 0; i < m; i++) {
-       int index;
-       cin >> index;
-       try {
-           minimums[i] = set.kesimoMenor(index);
-       }
-       catch (const std::out_of_range& e) {}
+   for (long long i = 0; i < n; i++) {
+       long long  num;
+       cin >> num;
+       nums.push(num);
    }
-   
-   
+
+   cout << calculaCoste(nums) << "\n";
    // escribir la solución
-   for (int e : minimums) {
-       if (e != -1) cout << e << endl;
-       else cout << "??" << endl;
-   }
-   cout << "---" << endl;
 
    return true;
 }
@@ -72,7 +67,7 @@ bool resuelveCaso() {
 int main() {
    // ajustes para que cin extraiga directamente de un fichero
 #ifndef DOMJUDGE
-   std::ifstream in("casos.txt");
+   std::ifstream in("casos.txt.in");
    auto cinbuf = std::cin.rdbuf(in.rdbuf());
 #endif
    

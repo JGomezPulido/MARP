@@ -29,7 +29,7 @@ long long calculaCoste(std::priority_queue<long long, std::vector<long long>, st
     while (nums.size() > 1) {
         long long a = nums.top(); nums.pop();
         long long b = nums.top(); nums.pop();
-        long costeTemp = a + b;
+        long long costeTemp = a + b;
         coste += costeTemp;
         nums.push(costeTemp);
     }

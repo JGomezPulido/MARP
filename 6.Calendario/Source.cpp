@@ -36,25 +36,44 @@ bool operator<(Tarea const& i, Tarea const& d) {
     return d.ini < i.ini || (d.ini == i.ini && d.fin < i.fin);
 }
 
-bool solapamiento(priority_queue<Tarea> &cola, int t) {
-    Tarea top = cola.top(); cola.pop();
+using task_queue = priority_queue<Tarea>;
+bool solapamiento(task_queue &cola, int t) {
+    /*Tarea top = cola.top(); cola.pop();
     if (top.period > -1) {
         cola.push({ top.ini + top.period, top.fin + top.period, top.period });
     }
     bool solap = false;
-    if(top.ini < t)
-    {
-        while (!solap && !cola.empty() && cola.top().ini < t) {
-            Tarea sec = cola.top(); cola.pop();
-            solap = sec.ini < top.fin;
-            if (sec.period > -1) {
-                cola.push({ sec.ini + sec.period, sec.fin + sec.period, sec.period });
-            }
-            top = sec;
+        
+    while (!solap && !cola.empty() && cola.top().ini < t) {
+        Tarea sec = cola.top(); cola.pop();
+        solap = sec.ini < top.fin;
+        if (sec.period > -1) {
+            cola.push({ sec.ini + sec.period, sec.fin + sec.period, sec.period });
+        }
+        top = sec;
+    }
+    
+    return solap;*/
+    int clock = 0;
+
+    while (!cola.empty()) {
+        Tarea tsk = cola.top(); cola.pop();
+
+        if (tsk.ini >= t) {
+            return false;
+        }
+
+        if (tsk.ini < clock) return true;
+
+        clock = tsk.fin;
+
+        if (tsk.period > 0) {
+            cola.push({ tsk.ini + tsk.period, tsk.fin + tsk.period, tsk.period });
         }
     }
-    return solap;
+    return false;
 }
+
 
 bool resuelveCaso() {
 
@@ -65,7 +84,7 @@ bool resuelveCaso() {
     if (!std::cin)  // fin de la entrada
         return false;
    
-    priority_queue<Tarea> cola;
+    task_queue cola;
 
     int i;
     for (i = 0; i < n; i++) {

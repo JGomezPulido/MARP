@@ -10,7 +10,7 @@
 #include <queue>
 using namespace std;
 
-
+#include "median_priority_queue.h"
 
 /*@ <answer>
 
@@ -27,10 +27,6 @@ using namespace std;
  //@ <answer>
 
 
-
-using min_q = priority_queue<int, std::vector<int>, std::greater<int>>;
-using max_q = priority_queue<int, std::vector<int>, std::less<int>>;
-
 bool resuelveCaso() {
 
     // leer los datos de la entrada
@@ -40,36 +36,23 @@ bool resuelveCaso() {
     if (!std::cin)  // fin de la entrada
         return false;
 
-    min_q mayores_ig;
-    max_q menores;
+    median_priority_queue cola;
     int pos = 0;
     // resolver el caso posiblemente llamando a otras funciones
     for (int i = 0; i < N; i++) {
         std::cin >> evt;
         if (evt == 0) {
             //TODO
-            int size = mayores_ig.size() + menores.size();
-            if (size == 0) {
-                std::cout << "ECSA ";
+            if (cola.empty()) {
+                cout << "ECSA ";
             }
             else {
-                
-                std::cout << mayores_ig.top() << " ";
-                mayores_ig.pop();
-                size -=1 ;
-                if (size % 2 == 0 && !menores.empty()) {
-                    mayores_ig.push(menores.top()); menores.pop();
-                }
+                cout << cola.top() << " ";
+                cola.pop();
             }
-           
         }
         else {
-            mayores_ig.push(evt);
-            int size = mayores_ig.size() + menores.size();
-            if(mayores_ig.size() > 1 && size % 2 == 1) {
-                auto p = mayores_ig.top(); mayores_ig.pop();
-                menores.push(p);
-            }
+            cola.push(evt);
         }
     }
     // escribir la solución

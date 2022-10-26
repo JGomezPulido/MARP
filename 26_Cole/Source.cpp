@@ -36,36 +36,36 @@ private:
     int umbral;
     int cams;
     vector<int> dist;
+    vector<int> caminos;
     vector<bool> visit;
     IndexPQ<int> pq;
 
     void relajar(Arista<int> a, int v) {
         int w = a.otro(v);
-        if (visit[w]) return;
-        if (dist[w] > dist[v] + a.valor() || dist[v] + a.valor() <= umbral) {
+        if (dist[w] > dist[v] + a.valor()) {
             dist[w] = dist[v] + a.valor();
-            pq.update(w, dist[w]); 
-            if (w == dest && dist[v] + a.valor() == umbral) cams++;
-            else if (w == dest && dist[v] + a.valor() < umbral) {
-                umbral = dist[w];
-                cams = 1;
-            }
+            pq.update(w, dist[w]);
+            caminos[w] = caminos[v];
+        }
+        else if (dist[w] == dist[v] + a.valor()) {
+            caminos[w] += caminos[v];
         }
 
     }
 public:
-    Caminos(GrafoValorado<int> const& g) : dest(g.V() - 1), orig(0), umbral(INF), cams(0), dist(g.V(), INF), visit(g.V(), false), pq(g.V()) {
+    Caminos(GrafoValorado<int> const& g) : dest(g.V() - 1), orig(0), umbral(INF), cams(0),
+        dist(g.V(), INF), caminos(g.V(), 0), pq(g.V()) {
         dist[orig] = 0;
+        caminos[orig] = 1;
         pq.push(orig, 0);
         while (!pq.empty()) {
             int v = pq.top().elem; pq.pop();
             for (Arista<int> a : g.ady(v))
                 relajar(a, v);
-            visit[v] = true;
         }
     };
 
-    int caminos() const { return cams; };
+    int cost() const { return caminos[caminos.size()-1]; };
 };
 
 bool resuelveCaso() {
@@ -78,7 +78,7 @@ bool resuelveCaso() {
     // resolver el caso posiblemente llamando a otras funciones
     Caminos sol(g);
     // escribir la solución
-    cout << sol.caminos() << "\n";
+    cout << sol.cost() << "\n";
     return true;
 }
 

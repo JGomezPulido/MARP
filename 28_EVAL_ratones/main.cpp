@@ -26,7 +26,7 @@ using namespace std;
  se resuelve el problema y cuál es el coste de la solución, en función
  del tamaño del problema.
  
- El coste del algoritmo es el coste de Djikstra, que es O(V+log A)
+ El coste del algoritmo es el coste de Djikstra, que es O(Alog V)
  @ </answer> */
 
 // ================================================================

@@ -9,6 +9,7 @@
 #include <fstream>
 #include <vector>
 #include <queue>
+#include <deque>
 using namespace std;
 
 /*@ <answer>
@@ -24,20 +25,30 @@ using namespace std;
  // Escribe el código completo de tu solución aquí debajo
  // ================================================================
  //@ <answer>
-using intPQ = priority_queue<int, std::vector<int>, std::greater<int>>;
+using intPQ = priority_queue<int, vector<int>, std::greater<int>>;
 
 int defensa(intPQ& jugadores, intPQ& equips) {
     int camisetas = jugadores.size();
-    int jugador = jugadores.top(); jugadores.pop();
-    while (!equips.empty() && camisetas > 0) {
-        int equipo = equips.top(); equips.pop();
+    int equipo, jugador;
+    deque<int> aux;
+    while (!jugadores.empty() && camisetas > 0) {
+        jugador = jugadores.top(); jugadores.pop();
         
-        if (equipo == jugador || equipo == jugador + 1) {
-            camisetas--;
-            if (!jugadores.empty()) {
-                
-                jugador = jugadores.top(); jugadores.pop();
+        while (!equips.empty())
+        {
+            equipo = equips.top(); equips.pop();
+            if (equipo == jugador || equipo == jugador + 1) {
+                camisetas--;
+                break;
             }
+            else if(equipo > jugador + 1) {
+                aux.push_back(equipo);
+                break;
+            }
+        }
+        while (!aux.empty()) {
+            equips.push(aux.front());
+            aux.pop_front();
         }
     }
     return camisetas;
@@ -53,7 +64,8 @@ bool resuelveCaso() {
     intPQ equips;
 
     int x;
-
+   
+    //deque<int> equips(M);
     for (int i = 0; i < N; i++) {
         cin >> x;
         jugadores.push(x);
@@ -62,7 +74,7 @@ bool resuelveCaso() {
         cin >> x;
         equips.push(x);
     }
-
+   
     cout << defensa(jugadores, equips) << "\n";
 
     return true;
